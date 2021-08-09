@@ -1,22 +1,23 @@
 // home page: run on both client and server
 import React from "react";
-import DigitalClock from "../src/DigitalClock";
+import axios from "axios";
 
 class Index extends React.Component {
   static getInitialProps() {
-    // mismatch fix
-    // return {
-    //   time: new Date(),
-    // };
-
-    // handling async requests --
-    const promise = new Promise((resolve, reject) => {
-      setInterval(() => {
-        resolve({
-          time: new Date(),
-        });
-      }, 3000);
-    });
+    var promise = axios
+      .get("http://localhost:4040/speakers")
+      .then((resp) => {
+        return {
+          hasErrored: false,
+          speakerData: resp.data,
+        };
+      })
+      .catch((err) => {
+        return {
+          hasErrored: true,
+          message: err.message,
+        };
+      });
 
     return promise;
   }
@@ -24,28 +25,26 @@ class Index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      time: props.time,
+      hasErrored: props.hasErrored,
+      speakerData: props.speakerData,
+      message: props.message,
     };
   }
 
-  tick() {
-    this.setState(() => {
-      return {
-        time: new Date().getTime(),
-      };
-    });
-  }
+  componentDidMount() {}
 
-  componentDidMount() {
-    this.interval = setInterval(() => this.tick(), 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
+  componentWillUnmount() {}
 
   render() {
-    return <DigitalClock time={this.state.time} />;
+    return (
+      <ul>
+        {this.state.speakerData.map((speaker) => (
+          <li key={speaker.id}>
+            {speaker.firstName} {speaker.lastName}
+          </li>
+        ))}
+      </ul>
+    );
   }
 }
 
