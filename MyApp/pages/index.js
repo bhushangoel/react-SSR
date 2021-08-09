@@ -9,7 +9,7 @@ class Index extends React.Component {
     //   time: new Date(),
     // };
 
-    // handling async requests
+    // handling async requests --
     const promise = new Promise((resolve, reject) => {
       setInterval(() => {
         resolve({
