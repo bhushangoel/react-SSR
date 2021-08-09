@@ -1,6 +1,7 @@
 // home page: run on both client and server
 import React from "react";
 import axios from "axios";
+import Link from "next/link";
 
 class Index extends React.Component {
   static getInitialProps() {
@@ -37,13 +38,18 @@ class Index extends React.Component {
 
   render() {
     return (
-      <ul>
-        {this.state.speakerData.map((speaker) => (
-          <li key={speaker.id}>
-            {speaker.firstName} {speaker.lastName}
-          </li>
-        ))}
-      </ul>
+      <div>
+        <Link href="/sessions">
+          <a>Sessions</a>
+        </Link>
+        <ul>
+          {this.state.speakerData.map((speaker) => (
+            <li key={speaker.id}>
+              {speaker.firstName} {speaker.lastName}
+            </li>
+          ))}
+        </ul>
+      </div>
     );
   }
 }
